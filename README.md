@@ -2,43 +2,10 @@
 
 A REST API wrapper for [apple-music-downloader](https://github.com/zhaarey/apple-music-downloader) that provides HTTP endpoints for downloading Apple Music content with real-time status tracking and progress monitoring.
 
-## Features
-
-- 🚀 Asynchronous download execution
-- 📊 Real-time status tracking
-- 📝 Progress logs streaming
-- 📜 Job history management
-- 🎵 Support for multiple formats (ALAC, Dolby Atmos, AAC)
-- 🎼 Album, playlist, and single song downloads
-- 🔍 Debug mode support
-- ✅ Health check endpoint
-- 🐳 Containerized deployment
-
 ## Prerequisites
 
 - Docker installed on your system
 - Apple Music account credentials (configured in `config.yaml`)
-
-## Installation
-
-### Method 1: Build from Source
-
-1. Clone this repository:
-```bash
-git clone <your-repo-url>
-cd apple-music-api
-```
-
-2. Build the Docker image:
-```bash
-docker build -t apple-music-api .
-```
-
-### Method 2: Using Docker Compose
-
-```bash
-docker-compose up -d
-```
 
 ## Configuration
 
@@ -63,20 +30,31 @@ docker run -d \
   apple-music-api
 ```
 
-**With Docker Compose:**
-
-create a `docker-compose.yaml` file:
+or
 
 ```yaml
 services:
-  apple-music-api:
+    apple-music-api:
     build: .
     ports:
-      - "8080:8080"
+        - "8080:8080"
     volumes:
-      - ./downloads:/downloads
-      - ./config.yaml:/app/config.yaml
-    restart: unless-stopped
+        - ./downloads:/downloads
+- ./config.yaml:/app/config.yaml
+restart: unless-stopped
+```
+
+**With Docker Compose:**
+
+use `compose.yaml` file
+
+First login to Apple Music:
+
+```bash
+docker run -it 
+  -v ./data:/app/rootfs/data 
+  -e args='-L username:password' 
+  tikhonp/apple-music-wrapper
 ```
 
 Then run:

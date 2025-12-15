@@ -1,0 +1,25 @@
+services:
+  apple-music-wrapper:
+    image: tikhonp/apple-music-wrapper
+    container_name: apple-music-wrapper
+    restart: unless-stopped
+    environment:
+      args: "-H 0.0.0.0"
+    volumes:
+      - "./data:/app/rootfs/data"
+    expose:
+      - "10020"
+      - "20020"
+      - "30020"
+
+  apple-music-api:
+    image: ghcr.io/tikhonp/apple-music-dl-http-wrapper
+    container_name: apple-music-api
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./downloads:/downloads
+      - ./config.yaml:/app/config.yaml
+    depends_on:
+      - apple-music-wrapper
