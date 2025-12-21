@@ -9,7 +9,7 @@ RUN --mount=type=cache,target=/go/pkg/mod/ \
     CGO_ENABLED=0 GOOS=${TARGETOS} GOARCH=${TARGETARCH} go build -o /build/api-wrapper main.go
 
 
-FROM ghcr.io/tikhonp/apple-music-downloader
+FROM ghcr.io/zhaarey/apple-music-downloader:46354291944816416bf5385708506948ec4400a5
 COPY --from=builder /build/api-wrapper /usr/local/bin/api-wrapper
 EXPOSE 8080
 # Change entrypoint to run the API wrapper instead
