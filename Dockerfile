@@ -14,8 +14,8 @@ FROM ghcr.io/zhaarey/apple-music-downloader:3c30f35bc4ae99d5d8f5da8458a6c951811b
 EXPOSE 8080
 
 # Default user and group IDs
-ENV PUID=1000 \
-    PGID=1000 \
+ENV PUID=10001 \
+    PGID=10001 \
     USER_NAME=amdownloader
 
 ENV DEBIAN_FRONTEND=noninteractive
@@ -24,17 +24,8 @@ RUN apt-get update \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-RUN set -eux; \
-    if ! getent group ${PGID} >/dev/null; then \
-        groupadd -g ${PGID} ${USER_NAME}; \
-    fi; \
-    if getent passwd ${PUID} >/dev/null; then \
-        OLD_USER="$(getent passwd ${PUID} | cut -d: -f1)"; \
-        usermod -l ${USER_NAME} "$OLD_USER"; \
-        usermod -d /home/${USER_NAME} -m ${USER_NAME}; \
-    else \
-        useradd -u ${PUID} -g ${PGID} -m ${USER_NAME}; \
-    fi
+RUN groupadd -g ${PGID} ${USER_NAME} \
+    && useradd -u ${PUID} -g ${PGID} -m ${USER_NAME}
 
 COPY --from=builder /build/api-wrapper /usr/local/bin/api-wrapper
 
