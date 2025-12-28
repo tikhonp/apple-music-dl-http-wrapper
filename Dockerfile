@@ -24,13 +24,16 @@ RUN apt-get update \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-RUN if ! getent group ${PGID} >/dev/null; then \
+RUN set -eux; \
+    if ! getent group ${PGID} >/dev/null; then \
         groupadd -g ${PGID} ${USER_NAME}; \
-    fi \
-    && if ! id -u ${PUID} >/dev/null 2>&1; then \
-        useradd -u ${PUID} -g ${PGID} -m ${USER_NAME}; \
+    fi; \
+    if getent passwd ${PUID} >/dev/null; then \
+        OLD_USER="$(getent passwd ${PUID} | cut -d: -f1)"; \
+        usermod -l ${USER_NAME} "$OLD_USER"; \
+        usermod -d /home/${USER_NAME} -m ${USER_NAME}; \
     else \
-        usermod -l ${USER_NAME} $(id -u ${PUID}); \
+        useradd -u ${PUID} -g ${PGID} -m ${USER_NAME}; \
     fi
 
 COPY --from=builder /build/api-wrapper /usr/local/bin/api-wrapper
