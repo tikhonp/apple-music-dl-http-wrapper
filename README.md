@@ -63,6 +63,9 @@ Then run:
 docker compose up -d
 ```
 
+> [!TIP]
+> You can set user permissions by adding the `PUID` and `PGID` environment variables to the compose file. Default values are `PUID=1000` and `PGID=1000`.
+
 ### API Endpoints
 
 #### 1. Start a Download

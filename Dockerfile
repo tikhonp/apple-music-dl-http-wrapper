@@ -10,18 +10,26 @@ RUN --mount=type=cache,target=/go/pkg/mod/ \
 
 
 FROM ghcr.io/zhaarey/apple-music-downloader:3c30f35bc4ae99d5d8f5da8458a6c951811bac58
-ARG UID=10001
-RUN adduser \
-    --disabled-password \
-    --gecos "" \
-    --home "/nonexistent" \
-    --shell "/sbin/nologin" \
-    --no-create-home \
-    --uid "${UID}" \
-    appuser
-USER appuser
-COPY --from=builder /build/api-wrapper /usr/local/bin/api-wrapper
+
 EXPOSE 8080
-# Change entrypoint to run the API wrapper instead
-ENTRYPOINT []
+
+# Default user and group IDs
+ENV PUID=1000 \
+    PGID=1000 \
+    USER_NAME=swingmusic
+
+ENV DEBIAN_FRONTEND=noninteractive
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends gosu \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN groupadd -g ${PGID} ${USER_NAME} \
+    && useradd -u ${PUID} -g ${PGID} -m ${USER_NAME}
+
+COPY --from=builder /build/api-wrapper /usr/local/bin/api-wrapper
+
+COPY entrypoint.sh /entrypoint.sh
+
+ENTRYPOINT ["/entrypoint.sh"]
 CMD ["/usr/local/bin/api-wrapper"]
