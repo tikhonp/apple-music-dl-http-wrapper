@@ -24,8 +24,12 @@ RUN apt-get update \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-RUN groupadd -g ${PGID} ${USER_NAME} \
-    && useradd -u ${PUID} -g ${PGID} -m ${USER_NAME}
+RUN if ! getent group ${PGID} >/dev/null; then \
+        groupadd -g ${PGID} ${USER_NAME}; \
+    fi \
+    && if ! id -u ${PUID} >/dev/null 2>&1; then \
+        useradd -u ${PUID} -g ${PGID} -m ${USER_NAME}; \
+    fi
 
 COPY --from=builder /build/api-wrapper /usr/local/bin/api-wrapper
 
