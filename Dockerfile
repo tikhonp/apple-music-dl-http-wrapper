@@ -1,4 +1,4 @@
-ARG GOVERSION=1.25.5
+ARG GOVERSION=1.27.1
 
 FROM --platform=$BUILDPLATFORM golang:${GOVERSION}-alpine AS builder
 ARG TARGETOS
@@ -9,7 +9,7 @@ RUN --mount=type=cache,target=/go/pkg/mod/ \
     CGO_ENABLED=0 GOOS=${TARGETOS} GOARCH=${TARGETARCH} go build -o /build/api-wrapper main.go
 
 
-FROM ghcr.io/zhaarey/apple-music-downloader:3c30f35bc4ae99d5d8f5da8458a6c951811bac58
+FROM ghcr.io/zhaarey/apple-music-downloader:0d895e0b2f6267d14dc1d56c5e2a9f15abfb25b0
 
 EXPOSE 8080
 
