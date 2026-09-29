@@ -85,7 +85,7 @@ docker compose up -d
 **Parameters:**
 - `url` (required): Apple Music URL (album, playlist, or song)
 - `format` (optional): Audio format - `"alac"` (default), `"atmos"`, or `"aac"`
-- `song` (optional): Set to `true` for single song downloads
+- `song` (optional): Informational only; single songs are detected from the URL (`/song/` or `?i=`)
 - `debug` (optional): Enable debug mode for detailed output
 
 **Example:**

@@ -15,7 +15,7 @@ if [ "$(id -u)" = "0" ]; then
 
     chown -R ${USER_NAME}:${USER_NAME} /app /config 2>/dev/null || true
 
-    exec gosu ${USER_NAME} "$@"
+    exec su-exec ${USER_NAME} "$@"
 fi
 
 exec "$@"

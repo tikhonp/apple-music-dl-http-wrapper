@@ -227,9 +227,8 @@ func executeDownload(jobID string, req DownloadRequest) {
 		jobManager.AppendLog(jobID, "Format: ALAC (default)")
 	}
 
-	// Add song flag
+	// amdl detects single songs from the URL (/song/ or ?i=), so there is no flag to pass
 	if req.Song {
-		args = append(args, "--song")
 		jobManager.AppendLog(jobID, "Mode: Single song")
 	}
 
@@ -242,7 +241,7 @@ func executeDownload(jobID string, req DownloadRequest) {
 	// Add URL
 	args = append(args, req.URL)
 
-	cmdStr := fmt.Sprintf("/usr/local/bin/apple-music-dl %v", args)
+	cmdStr := fmt.Sprintf("/usr/local/bin/amdl %v", args)
 	jobManager.AppendLog(jobID, fmt.Sprintf("Command: %s", cmdStr))
 
 	// Create context with timeout
@@ -250,7 +249,7 @@ func executeDownload(jobID string, req DownloadRequest) {
 	defer cancel()
 
 	// Execute command with context
-	cmd := exec.CommandContext(ctx, "/usr/local/bin/apple-music-dl", args...)
+	cmd := exec.CommandContext(ctx, "/usr/local/bin/amdl", args...)
 
 	// Capture stdout and stderr
 	stdout, err := cmd.StdoutPipe()

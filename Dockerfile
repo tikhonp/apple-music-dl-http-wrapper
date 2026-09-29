@@ -18,14 +18,13 @@ ENV PUID=10001 \
     PGID=10001 \
     USER_NAME=amdownloader
 
-ENV DEBIAN_FRONTEND=noninteractive
-RUN apt-get update \
-    && apt-get install -y --no-install-recommends gosu \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
+RUN apk add --no-cache shadow su-exec
 
 RUN groupadd -g ${PGID} ${USER_NAME} \
     && useradd -u ${PUID} -g ${PGID} -m ${USER_NAME}
+
+# amdl reads config.yaml from its working directory
+WORKDIR /app
 
 COPY --from=builder /build/api-wrapper /usr/local/bin/api-wrapper
 
