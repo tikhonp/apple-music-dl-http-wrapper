@@ -9,7 +9,7 @@ RUN --mount=type=cache,target=/go/pkg/mod/ \
     CGO_ENABLED=0 GOOS=${TARGETOS} GOARCH=${TARGETARCH} go build -o /build/api-wrapper main.go
 
 
-FROM ghcr.io/zhaarey/apple-music-downloader:0.1.3
+FROM ghcr.io/zhaarey/apple-music-downloader:0.1.4
 
 EXPOSE 8080
 
