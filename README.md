@@ -1,5 +1,8 @@
 # Apple Music Downloader HTTP wrapper
 
+> [!WARNING]
+> This repository is archived. I built [shelf](https://github.com/tikhonp/shelf) for this purpose instead.
+
 An HTTP API for [apple-music-downloader](https://github.com/zhaarey/apple-music-downloader). Start a download with a POST request, then poll for its status and logs.
 
 ## Setup
